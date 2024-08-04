@@ -169,6 +169,7 @@ Result browseFiles(const char *const basePath, char selected[512])
 			hidScanInput();
 			if(hidGetExtraKeys(0) & (KEY_POWER_HELD | KEY_POWER)) goto end;
 			kDown = hidKeysDown();
+            kHeld = hidKeysHeld();
 		} while(kDown == 0);
 
 		const u32 num = dList->num;
@@ -185,8 +186,8 @@ Result browseFiles(const char *const basePath, char selected[512])
 				cursorPos -= SCREEN_ROWS;
 				if(cursorPos < -1) cursorPos = 0;
 			}
-			if(kDown & KEY_DUP)    cursorPos -= 1;
-			if(kDown & KEY_DDOWN)  cursorPos += 1;
+			if(kDown & KEY_DUP || kHeld & KEY_DUP)    cursorPos -= 1;
+			if(kDown & KEY_DDOWN || kHeld & KEY_DDOWN)  cursorPos += 1;
 		}
 
 		if(cursorPos < 0)              cursorPos = num - 1; // Wrap to end of list.
